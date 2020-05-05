@@ -19,8 +19,27 @@ jobs:
     steps:
 
     - name: Run a one-line script
+      run: pwd && cd ~ && pwd
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+
+    - name: Run a one-line script
+      run: pwd && git status
+  
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with: 
+        repository: rcmdnk/test0
+
+
+    - name: Run a one-line script
       run: pwd && git status
 
-#    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#    - uses: actions/checkout@v2
 
+    - name: cd 
+      run: cd && pwd
+      
+    - name: pwd
+      run: pwd
