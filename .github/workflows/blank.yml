@@ -32,10 +32,11 @@ jobs:
     - uses: actions/checkout@v2
       with: 
         repository: rcmdnk/test0
-
+        path: test0
 
     - name: Run a one-line script
       run: pwd && git status
+
 
 
     - name: cd 
@@ -43,3 +44,6 @@ jobs:
       
     - name: pwd
       run: pwd
+
+    - name: check
+      run: echo 'ls ~' && ls ~ && echo ls GITHUB_WORKSPACE && ls $GITHUB_WORKSPACE 
