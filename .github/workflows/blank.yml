@@ -21,17 +21,8 @@ jobs:
     - name: Run a one-line script
       run: pwd && cd && pwd
 
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+#    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#    - uses: actions/checkout@v2
 
     - name: Run a one-line script
       run: pwd
-
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-
-    - name: Run a one-line script
-      run: pwd
-      
-    - name: ls
-      run: ls ~
