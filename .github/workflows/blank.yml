@@ -19,7 +19,7 @@ jobs:
     steps:
 
     - name: Run a one-line script
-      run: pwd
+      run: pwd && cd && pwd
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
