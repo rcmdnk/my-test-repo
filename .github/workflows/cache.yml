@@ -1,0 +1,44 @@
+---
+name: cache
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache/restore@v4
+        id: restore
+        with:
+          path: /tmp/mycache
+          key: mycache
+          lookup-only: true
+      - if: steps.restore.outputs.cache-hit != 'true'
+        name: prepare
+        run: |
+          mkdir -p /tmp/mycache
+          echo test > /tmp/mycache/test.txt
+      - if: steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/mycache
+          key: mycache
+  restore:
+    runs-on: ubuntu-latest
+    needs: save
+    steps:
+      - uses: actions/cache/restore@v4
+        with:
+          path: /tmp/mycache
+          key: mycache
+      - name: check
+        run: cat /tmp/mycache/test.txt
