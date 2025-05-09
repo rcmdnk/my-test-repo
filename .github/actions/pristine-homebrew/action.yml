@@ -23,23 +23,85 @@ runs:
       with:
         lookup-only: true
         path: /tmp/hoge
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-hoge
-    - if: steps.restore.outputs.cache-hit != 'true'
-      name: prepare
+          /opt/homebrew/bin
+          /opt/homebrew/etc
+          /opt/homebrew/etc
+          /opt/homebrew/lib
+          /opt/homebrew/opt
+          /opt/homebrew/sbin
+          /opt/homebrew/share
+          /opt/homebrew/var
+          /opt/homebrew/Library/Taps
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+    - name: Remove current Homebrew directories
+      if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        mkdir /tmp/hoge
-        echo cache_test > /tmp/hoge/test.txt
+        while read -r d; do
+          rm -rf "$d"
+        done <<<"${{ env.CACHE_PATHS }}"
     - name: Restore pristine Homebrew
       id: cache_restore
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
       uses: actions/cache/restore@v4
       with:
-        path: /tmp/hoge
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-hoge
+        path: |
+          /opt/homebrew/bin
+          /opt/homebrew/etc
+          /opt/homebrew/etc
+          /opt/homebrew/lib
+          /opt/homebrew/opt
+          /opt/homebrew/sbin
+          /opt/homebrew/share
+          /opt/homebrew/var
+          /opt/homebrew/Library/Taps
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+    - name: Make Homebrew pristine
+      if: steps.cache_lookup.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        formulae=()
+        while IFS= read -r f; do
+          formulae+=("$f")
+        done < <(brew list --formula)
+        if [ "${#formulae[@]}" -gt 0 ]; then
+          brew uninstall --formula --force "${formulae[@]}"
+        fi
+
+        casks=()
+        while IFS= read -r c; do
+          casks+=("$c")
+        done < <(brew list --cask)
+        if [ "${#casks[@]}" -gt 0 ]; then
+          brew uninstall --cask --zap --force "${casks[@]}"
+        fi
+
+        taps=()
+        while IFS= read -r t; do
+          taps+=("$t")
+        done < <(brew tap)
+        if [ "${#taps[@]}" -gt 0 ]; then
+          brew untap "${taps[@]}"
+        fi
     - name: Save pristine Homebrew
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: /tmp/hoge
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-hoge
+        path: |
+          /opt/homebrew/bin
+          /opt/homebrew/etc
+          /opt/homebrew/etc
+          /opt/homebrew/lib
+          /opt/homebrew/opt
+          /opt/homebrew/sbin
+          /opt/homebrew/share
+          /opt/homebrew/var
+          /opt/homebrew/Library/Taps
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+    - name: Remove brew download cache
+      if: inputs.restore == 'true'
+      shell: bash
+      run: |
+        rm -rf "$(brew --cache)" || true
