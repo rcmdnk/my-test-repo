@@ -26,6 +26,7 @@ runs:
         key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-hoge
     - if: steps.restore.outputs.cache-hit != 'true'
       name: prepare
+      shell: bash
       run: |
         mkdir /tmp/hoge
         echo cache_test > /tmp/hoge/test.txt
