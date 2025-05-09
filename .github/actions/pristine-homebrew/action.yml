@@ -25,7 +25,7 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi2
     - name: Restore pristine Homebrew
       id: cache_restore
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
@@ -34,7 +34,7 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi2
     - name: Make Homebrew pristine
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       shell: bash
@@ -71,4 +71,4 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi2
