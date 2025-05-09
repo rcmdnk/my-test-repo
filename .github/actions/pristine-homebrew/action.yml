@@ -22,7 +22,9 @@ runs:
       uses: actions/cache/restore@v4
       with:
         lookup-only: true
-        path: /opt/homebrew/bin /opt/homebrew/etc
+        path: |
+          /opt/homebrew/bin
+          /opt/homebrew/etc
         key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
     - name: Remove current Homebrew directories
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
@@ -36,7 +38,9 @@ runs:
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
       uses: actions/cache/restore@v4
       with:
-        path: /opt/homebrew/bin /opt/homebrew/etc
+        path: |
+          /opt/homebrew/bin
+          /opt/homebrew/etc
         key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
     - name: Make Homebrew pristine
       if: steps.cache_lookup.outputs.cache-hit != 'true'
@@ -71,7 +75,9 @@ runs:
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: /opt/homebrew/bin /opt/homebrew/etc
+        path: |
+          /opt/homebrew/bin
+          /opt/homebrew/etc
         key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
     - name: Remove brew download cache
       if: inputs.restore == 'true'
