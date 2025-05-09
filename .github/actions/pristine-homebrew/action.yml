@@ -31,7 +31,7 @@ runs:
           /opt/homebrew/share
           /opt/homebrew/var
           /opt/homebrew/Library/Taps
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test1
     - name: Remove current Homebrew directories
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
       shell: bash
@@ -45,16 +45,15 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: |
-          ${{ steps.brew.outputs.prefix }}/bin
-          ${{ steps.brew.outputs.prefix }}/etc
-          ${{ steps.brew.outputs.prefix }}/etc
-          ${{ steps.brew.outputs.prefix }}/lib
-          ${{ steps.brew.outputs.prefix }}/opt
-          ${{ steps.brew.outputs.prefix }}/sbin
-          ${{ steps.brew.outputs.prefix }}/share
-          ${{ steps.brew.outputs.prefix }}/var
-          ${{ steps.brew.outputs.prefix }}/Library/Taps
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+          /opt/homebrew/bin
+          /opt/homebrew/etc
+          /opt/homebrew/lib
+          /opt/homebrew/opt
+          /opt/homebrew/sbin
+          /opt/homebrew/share
+          /opt/homebrew/var
+          /opt/homebrew/Library/Taps
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test1
     - name: Make Homebrew pristine
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       shell: bash
@@ -89,16 +88,15 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: |
-          ${{ steps.brew.outputs.prefix }}/bin
-          ${{ steps.brew.outputs.prefix }}/etc
-          ${{ steps.brew.outputs.prefix }}/etc
-          ${{ steps.brew.outputs.prefix }}/lib
-          ${{ steps.brew.outputs.prefix }}/opt
-          ${{ steps.brew.outputs.prefix }}/sbin
-          ${{ steps.brew.outputs.prefix }}/share
-          ${{ steps.brew.outputs.prefix }}/var
-          ${{ steps.brew.outputs.prefix }}/Library/Taps
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test0
+          /opt/homebrew/bin
+          /opt/homebrew/etc
+          /opt/homebrew/lib
+          /opt/homebrew/opt
+          /opt/homebrew/sbin
+          /opt/homebrew/share
+          /opt/homebrew/var
+          /opt/homebrew/Library/Taps
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test1
     - name: Remove brew download cache
       if: inputs.restore == 'true'
       shell: bash
