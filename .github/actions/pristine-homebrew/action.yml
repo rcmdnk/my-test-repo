@@ -24,8 +24,7 @@ runs:
         lookup-only: true
         path: |
           /opt/homebrew/bin
-          /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-bin
     - name: Remove current Homebrew directories
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
       shell: bash
@@ -40,8 +39,7 @@ runs:
       with:
         path: |
           /opt/homebrew/bin
-          /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-bin
     - name: Make Homebrew pristine
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       shell: bash
@@ -77,8 +75,7 @@ runs:
       with:
         path: |
           /opt/homebrew/bin
-          /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test2
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-bin
     - name: Remove brew download cache
       if: inputs.restore == 'true'
       shell: bash
