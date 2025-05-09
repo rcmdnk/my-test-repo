@@ -19,26 +19,52 @@ jobs:
       - uses: actions/cache/restore@v4
         id: restore
         with:
-          path: /tmp/mycache
-          key: mycache
+          path: |
+            /home/linuxbrew/.linuxbrew/bin
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/lib
+            /home/linuxbrew/.linuxbrew/opt
+            /home/linuxbrew/.linuxbrew/sbin
+            /home/linuxbrew/.linuxbrew/share
+            /home/linuxbrew/.linuxbrew/var
+            /home/linuxbrew/.linuxbrew/Library/Taps
+          key: mycache2
           lookup-only: true
       - if: steps.restore.outputs.cache-hit != 'true'
         name: prepare
         run: |
-          mkdir -p /tmp/mycache
-          echo test > /tmp/mycache/test.txt
+          echo cache_test > /home/linuxbrew/.linuxbrew/var/test.txt
       - if: steps.restore.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
-          path: /tmp/mycache
-          key: mycache
+          path: |
+            /home/linuxbrew/.linuxbrew/bin
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/lib
+            /home/linuxbrew/.linuxbrew/opt
+            /home/linuxbrew/.linuxbrew/sbin
+            /home/linuxbrew/.linuxbrew/share
+            /home/linuxbrew/.linuxbrew/var
+            /home/linuxbrew/.linuxbrew/Library/Taps
+          key: mycache2
   restore:
     runs-on: ubuntu-latest
     needs: save
     steps:
       - uses: actions/cache/restore@v4
         with:
-          path: /tmp/mycache
-          key: mycache
+          path: |
+            /home/linuxbrew/.linuxbrew/bin
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/etc
+            /home/linuxbrew/.linuxbrew/lib
+            /home/linuxbrew/.linuxbrew/opt
+            /home/linuxbrew/.linuxbrew/sbin
+            /home/linuxbrew/.linuxbrew/share
+            /home/linuxbrew/.linuxbrew/var
+            /home/linuxbrew/.linuxbrew/Library/Taps
+          key: mycache2
       - name: check
-        run: cat /tmp/mycache/test.txt
+        run: cat  /home/linuxbrew/.linuxbrew/var/test.txt
