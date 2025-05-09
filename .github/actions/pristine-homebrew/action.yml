@@ -17,6 +17,14 @@ env:
 runs:
   using: composite
   steps:
+    - name: check dir
+      shell: bash
+      run: |
+        ls /opt/homebrew
+    - name: check dir
+      shell: bash
+      run: |
+        ls /opt/homebrew/bin
     - name: Cache lookup
       id: cache_lookup
       uses: actions/cache/restore@v4
