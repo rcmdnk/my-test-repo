@@ -1,0 +1,44 @@
+---
+name: cache
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-pristine-homebrew:
+    strategy:
+      fail-fast: false
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-homebrew
+      - uses: ./.github/actions/pristine-homebrew
+        with:
+          os: ${{ runner.os }}
+          restore: false
+  restore:
+    strategy:
+      fail-fast: false
+    needs: [prepare-pristine-homebrew]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-homebrew
+      - uses: ./.github/actions/pristine-homebrew
+        with:
+          os: ${{ runner.os }}
+          restore: true
