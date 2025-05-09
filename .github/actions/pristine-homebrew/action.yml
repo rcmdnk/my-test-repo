@@ -39,7 +39,31 @@ runs:
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        mkdir -p /opt/homebrew/bin
+        set -euo pipefail
+
+        formulae=()
+        while IFS= read -r f; do
+          formulae+=("$f")
+        done < <(brew list --formula)
+        if [ "${#formulae[@]}" -gt 0 ]; then
+          brew uninstall --formula --force "${formulae[@]}"
+        fi
+
+        casks=()
+        while IFS= read -r c; do
+          casks+=("$c")
+        done < <(brew list --cask)
+        if [ "${#casks[@]}" -gt 0 ]; then
+          brew uninstall --cask --zap --force "${casks[@]}"
+        fi
+
+        taps=()
+        while IFS= read -r t; do
+          taps+=("$t")
+        done < <(brew tap)
+        if [ "${#taps[@]}" -gt 0 ]; then
+          brew untap "${taps[@]}"
+        fi
     - name: Save pristine Homebrew
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
