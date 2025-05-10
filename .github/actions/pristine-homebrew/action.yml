@@ -25,7 +25,7 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi3
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi4
     - name: Restore pristine Homebrew
       id: cache_restore
       if: inputs.restore == 'true' && steps.cache_lookup.outputs.cache-hit == 'true'
@@ -34,36 +34,38 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi3
-    #- name: Make Homebrew pristine
-    #  if: steps.cache_lookup.outputs.cache-hit != 'true'
-    #  shell: bash
-    #  run: |
-    #    set -euo pipefail
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi4
+    - name: Make Homebrew pristine
+      if: steps.cache_lookup.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
 
-    #    formulae=()
-    #    while IFS= read -r f; do
-    #      formulae+=("$f")
-    #    done < <(brew list --formula)
-    #    if [ "${#formulae[@]}" -gt 0 ]; then
-    #      brew uninstall --formula --force "${formulae[@]}"
-    #    fi
+        formulae=()
+        while IFS= read -r f; do
+          formulae+=("$f")
+        done < <(brew list --formula)
+        if [ "${#formulae[@]}" -gt 0 ]; then
+          brew uninstall --formula --force "${formulae[@]}"
+        fi
 
-    #    casks=()
-    #    while IFS= read -r c; do
-    #      casks+=("$c")
-    #    done < <(brew list --cask)
-    #    if [ "${#casks[@]}" -gt 0 ]; then
-    #      brew uninstall --cask --zap --force "${casks[@]}"
-    #    fi
+        casks=()
+        while IFS= read -r c; do
+          casks+=("$c")
+        done < <(brew list --cask)
+        if [ "${#casks[@]}" -gt 0 ]; then
+          brew uninstall --cask --zap --force "${casks[@]}"
+        fi
 
-    #    taps=()
-    #    while IFS= read -r t; do
-    #      taps+=("$t")
-    #    done < <(brew tap)
-    #    if [ "${#taps[@]}" -gt 0 ]; then
-    #      brew untap "${taps[@]}"
-    #    fi
+        taps=()
+        while IFS= read -r t; do
+          taps+=("$t")
+        done < <(brew tap)
+        if [ "${#taps[@]}" -gt 0 ]; then
+          brew untap "${taps[@]}"
+        fi
+
+        ls /opt/homebrew
     - name: Save pristine Homebrew
       if: steps.cache_lookup.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
@@ -71,4 +73,4 @@ runs:
         path: |
           /opt/homebrew/bin
           /opt/homebrew/etc
-        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi3
+        key: brew-pristine-${{ inputs.os }}-${{ github.ref_name }}-${{ steps.brew.outputs.version }}-test-multi4
