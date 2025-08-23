@@ -5,4 +5,4 @@ Test repository
 
 # A B C
 
-# A >= B
+# A >= 0.2
